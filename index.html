@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EC2 Toggle</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Arial", sans-serif;
+      background: #e9e9e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: #fffdf9;
+      width: 360px;
+      padding: 34px 28px;
+      border-radius: 34px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      border: 4px solid #222;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      color: #ff4fa3;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0 0 24px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 96px;
+      height: 48px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      background: #ffb6da;
+      border-radius: 999px;
+      transition: 0.35s ease;
+      border: 3px solid #222;
+    }
+
+    .slider:before {
+      content: "☁️";
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      left: 1.5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #fff;
+      border: 3px solid #222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: 0.35s ease;
+    }
+
+    input:checked + .slider {
+      background: #8fd8ff;
+    }
+
+    input:checked + .slider:before {
+      transform: translate(47px, -50%);
+      content: "💻";
+    }
+
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #444;
+    }
+
+    .small {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Decorative doodle stickers */
+    .sticker {
+      position: absolute;
+      z-index: 1;
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.08));
+    }
+
+    .star {
+      font-size: 42px;
+    }
+
+    .small-star {
+      font-size: 26px;
+    }
+
+    .paw,
+    .apple,
+    .bow,
+    .tag,
+    .worm {
+      font-size: 58px;
+    }
+
+    .tag {
+      font-size: 72px;
+      transform: rotate(-8deg);
+    }
+
+    .worm {
+      font-size: 50px;
+      transform: rotate(20deg);
+    }
+
+    /* top area */
+    .s1 { top: 28px; left: 38%; color: #ff79bb; transform: rotate(-12deg); }
+    .s2 { top: 40px; left: 49%; color: #2acbff; transform: rotate(8deg); }
+    .s3 { top: 58px; left: 46%; color: #ffd700; }
+    .paw1 { top: 42px; right: 145px; }
+    .apple1 { top: 30px; right: 52px; }
+    .s4 { top: 132px; right: 86px; color: #95d23f; }
+    .worm1 { top: 150px; right: 78px; }
+    .s5 { top: 210px; right: 92px; color: #ffd700; }
+    .s6 { top: 268px; right: 52px; color: #ff3a3a; }
+
+    /* bottom left area */
+    .s7 { bottom: 300px; left: 28px; color: #ffd700; }
+    .s8 { bottom: 364px; left: 66px; color: #ff3a3a; }
+    .bow1 { bottom: 215px; left: 48px; }
+    .s9 { bottom: 170px; left: 36px; color: #95d23f; }
+    .tag1 { bottom: 38px; left: 36px; }
+    .paw2 { bottom: 52px; left: 170px; }
+
+    /* bottom center area */
+    .s10 { bottom: 54px; left: 43%; color: #2acbff; }
+    .s11 { bottom: 68px; left: 50%; color: #ffd700; }
+    .s12 { bottom: 44px; left: 57%; color: #ff79bb; }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 88%;
+        max-width: 340px;
+      }
+
+      .paw,
+      .apple,
+      .bow,
+      .tag,
+      .worm {
+        font-size: 46px;
+      }
+
+      .tag {
+        font-size: 58px;
+      }
+
+      .star {
+        font-size: 34px;
+      }
+
+      .small-star {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- doodle border decorations -->
+  <div class="sticker star s1">☆</div>
+  <div class="sticker star s2">☆</div>
+  <div class="sticker small-star s3">☆</div>
+  <div class="sticker paw paw1">🐾</div>
+  <div class="sticker apple apple1">🍎</div>
+  <div class="sticker small-star s4">☆</div>
+  <div class="sticker worm worm1">〰️</div>
+  <div class="sticker star s5">☆</div>
+  <div class="sticker small-star s6">☆</div>
+
+  <div class="sticker star s7">☆</div>
+  <div class="sticker small-star s8">☆</div>
+  <div class="sticker bow bow1">🎀</div>
+  <div class="sticker small-star s9">☆</div>
+  <div class="sticker tag tag1">🏷️</div>
+  <div class="sticker paw paw2">🐾</div>
+
+  <div class="sticker star s10">☆</div>
+  <div class="sticker small-star s11">☆</div>
+  <div class="sticker star s12">☆</div>
+
+  <div class="card">
+    <h2>EC2 Toggle</h2>
+    <p>Turn your instance on or off 💕</p>
+
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch" onchange="toggleEC2()" />
+      <span class="slider"></span>
+    </label>
+
+    <div id="status">Instance is idle 🌸</div>
+    <div class="small">API connected successfully ✨</div>
+  </div>
+
+  <script>
+    // Store your API Gateway endpoint here
+    const endpoint = "https://";
+
+    async function toggleEC2() {
+      const toggle = document.getElementById("toggleSwitch");
+      const status = document.getElementById("status");
+      const action = toggle.checked ? "start" : "stop";
+
+      // Disable toggle while request is in flight
+      toggle.disabled = true;
+
+      status.innerText = toggle.checked
+        ? "Starting instance... ☁️"
+        : "Stopping instance... 🌙";
+
+      try {
+        const response = await fetch(endpoint + "?action=" + action, {
+          method: "GET"
+        });
+
+        if (!response.ok) {
+          status.innerText = "HTTP Error: " + response.status;
+          return;
+        }
+
+        const data = await response.json();
+        status.innerText = data.message || "Done";
+      } catch (error) {
+        status.innerText = "Error: " + error.message;
+        console.error(error);
+      } finally {
+        // Re-enable toggle after request completes
+        toggle.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
